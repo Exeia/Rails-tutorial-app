@@ -1,8 +1,4 @@
 module SessionsHelper
-<<<<<<< HEAD
-    def log_in(user)
-        session[:user_id] = user.id
-    end
 
     def remember(user)
         user.remember
@@ -14,15 +10,6 @@ module SessionsHelper
         @current_user ||= User.find_by(id: session[:user_id])
     end
 
-    def logged_in?
-         !current_user.nil?
-    end
-    
-    def log_out
-        forget(current_user)
-        session.delete(:user_id)
-        @current_user = nil
-    end
 
     def current_user
         if (user_id = session[:user_id])
@@ -42,7 +29,6 @@ module SessionsHelper
         cookies.delete(:user_id)
         cookies.delete(:remember_token)
     end
-=======
     def sign_in(user)
         remember_token = User.new_remember_token
         cookies.permanent[:remember_token] = remember_token
@@ -73,5 +59,31 @@ module SessionsHelper
         @current_user ||= User.find_by(remember_token: remember_token)
         
     end
->>>>>>> sign-up
+
+    def current_user?(user)
+        user==current_user
+        
+    end    
+    def redirect_back_or(default)
+        redirect_to(session[:return_to] || default)
+        session.delete(:return_to)
+        
+    end
+
+    def store_location
+        session[:return_to] = request.url if request.get?
+        
+    end
+
+    def create
+        user = User.find_by(email: params[:session][:email].downcase)
+        if user && user.authenicate(params[:session][:password])
+            sign_in user
+            redirect_back_or user 
+        else
+            flash.now[:error] = 'Invalid email/password combination'
+            render 'new'
+            
+        end
+    end
 end

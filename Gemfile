@@ -38,7 +38,8 @@ group :test do
         gem 'capybara', '2.1.0'
        gem 'factory_girl_rails', '4.2.0'
 end
-
+gem 'faker', '1.1.2'
+gem 'will_paginate', '3.0.4'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
