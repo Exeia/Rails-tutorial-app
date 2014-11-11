@@ -108,5 +108,16 @@ describe User do
             it { should have_selector('div.alert.alert-success', text: 'Welcome') }
             end
         
-    end    
+    end   
+   it { should respond_to(:authenticate) }
+  it { should respond_to(:admin) }
+ describe "with admin attribute set to 'true'" do
+    before do
+        @user.save!
+        @user.toggle!(:admin)
+    end
+    it { should be_admin }
+ end
+
+
 end
